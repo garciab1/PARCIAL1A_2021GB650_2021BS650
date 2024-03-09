@@ -35,23 +35,6 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(listadoLibros);
         }
 
-        // BUSCAR POR NOMBRE
-        [HttpGet]
-        [Route("GetLibroByNombre/{nombre}")]
-
-        public IActionResult GetByNombre(string nombre)
-        {
-            libros? libro = (from e in _parcialContexto.libros
-                               where e.Titulo == nombre
-                             select e).FirstOrDefault();
-            if (libro == null)
-            {
-                return NotFound();
-            }
-            return Ok(libro);
-        }
-
-
         [HttpPost]
         [Route("Add")]
 
@@ -106,6 +89,25 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             _parcialContexto.libros.Attach(libro);
             _parcialContexto.libros.Remove(libro);
             _parcialContexto.SaveChanges();
+
+            return Ok(libro);
+        }
+
+        // BUSCAR POR NOMBRE
+        [HttpGet]
+        [Route("GetLibroByNombreAutor/{nombre}")]
+        public IActionResult GetByNombre(string nombre)
+        {
+            var libro = (from l in _parcialContexto.libros
+                         join al in _parcialContexto.autorlibro on l.Id equals al.LibroId
+                         join a in _parcialContexto.autores on al.AutorId equals a.Id
+                         where a.Nombre == nombre
+                         select l).FirstOrDefault();
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
 
             return Ok(libro);
         }

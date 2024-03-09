@@ -50,22 +50,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             }
             return Ok(autores);
         }
-
-        [HttpGet]
-        [Route("Find/{filtro}")]
-
-        public IActionResult FindByDescription(string filtro)
-        {
-            autores? autores = (from a in _parcialContexto.autores
-                                where a.Nombre.Contains(filtro)
-                               select a).FirstOrDefault();
-            if (autores == null)
-            {
-                return NotFound();
-            }
-            return Ok(autores);
-        }
-
+      
         [HttpPost]
         [Route("Add")]
 

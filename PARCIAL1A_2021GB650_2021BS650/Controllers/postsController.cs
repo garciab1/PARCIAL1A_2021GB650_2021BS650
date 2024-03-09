@@ -35,69 +35,6 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(listadoposts);
         }
 
-        [HttpGet]
-        [Route("GetById/{id}")]
-
-        public IActionResult Get(int id)
-        {
-            posts? posts = (from p in _parcialContexto.posts
-                                where p.Id == id
-                                select p).FirstOrDefault();
-            if (posts == null)
-            {
-                return NotFound();
-            }
-            return Ok(posts);
-        }
-
-       
-
-
-        [HttpGet]
-        [Route("Find/{filtro}")]
-
-        public IActionResult FindByDescription(string filtro)
-        {
-            posts? posts = (from p in _parcialContexto.posts
-                            where p.Titulo.Contains(filtro)
-                                select p).FirstOrDefault();
-            if (posts == null)
-            {
-                return NotFound();
-            }
-            return Ok(posts);
-        }
-
-        /// por autor  
-
-
-        [HttpGet]
-        [Route("FindAutor/{filtro}")]
-
-        public IActionResult FindByDes(string filtro)
-        {
-            var posts = (from po in _parcialContexto.posts
-                         join a in _parcialContexto.autores
-                         on po.AutorId equals a.Id
-
-                         where a.Nombre == filtro
-
-                         select new
-                         {
-                             po.Id,
-                             a.Nombre
-
-                         })
-                         .OrderBy(resultado => resultado.Nombre)
-                         .Take(20)
-                         .ToList();
-            if (posts == null)
-            {
-                return NotFound();
-            }
-            return Ok(posts);
-        }
-
        
         [HttpPost]
         [Route("Add")]
@@ -162,10 +99,37 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(posts);
         }
 
+        /// Buscar libro por autor  
+
+        [HttpGet]
+        [Route("Get20PostByAutor/{filtro}")]
+
+        public IActionResult FindByAutor(string filtro)
+        {
+            var posts = (from po in _parcialContexto.posts
+                         join a in _parcialContexto.autores
+                         on po.AutorId equals a.Id
+                         where a.Nombre == filtro
+                         select new
+                         {
+                             po.Id,
+                             po.Titulo,
+                             po.Contenido,
+                             po.FechaPublicacion,
+                             Autor = a.Nombre
+                         })
+                         .Take(20)
+                         .ToList();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return Ok(posts);
+        }
+
         // Obterner post por libro
         [HttpGet]
         [Route("GetPostByLibro/{libro}")]
-
         public IActionResult GetPostByLibro(string libro)
         {
             var posts = (from p in _parcialContexto.posts
@@ -175,13 +139,14 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
                          on a.Id equals au.AutorId
                          join li in _parcialContexto.libros
                          on au.LibroId equals li.Id
+                         where li.Titulo == libro
                          select new
                          {
                              p.Id,
                              p.Contenido,
                              p.Titulo,
                              p.FechaPublicacion,
-                             titulo = li.Titulo
+                             LibroTitulo = li.Titulo 
                          }).ToList();
             if (posts.Count() == 0)
             {
@@ -189,6 +154,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             }
             return Ok(posts);
         }
+
 
     }
 }
