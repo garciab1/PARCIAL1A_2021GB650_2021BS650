@@ -5,6 +5,7 @@
         public int Id { get; set; }
         public string? Titutlo { get; set; }
         public string? Contenido { get; set; }
-        public  DateTime? 
+        public  DateTime? FechaPublicacion { get; set; }
+        public int? AutorId { get; set; }
     }
 }
