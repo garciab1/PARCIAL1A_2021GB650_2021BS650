@@ -6,6 +6,8 @@ using PARCIAL1A_2021GB650_2021BS650.Models;
 
 namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class autorLibroController : Controller
     {
 

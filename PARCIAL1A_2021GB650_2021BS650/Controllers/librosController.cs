@@ -6,6 +6,8 @@ using PARCIAL1A_2021GB650_2021BS650.Models;
 
 namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class librosController : Controller
     {
         private readonly parcial1aContext _parcialContexto;
@@ -14,7 +16,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         {
             _parcialContexto = parcial1aContexto;
         }
-
+        
         ///sumary
         /// EndPoint que retorna el listado de todos los equipos existentes
         /// summary
