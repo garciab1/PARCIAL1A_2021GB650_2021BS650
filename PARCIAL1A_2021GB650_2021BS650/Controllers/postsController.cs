@@ -159,6 +159,34 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(posts);
         }
 
+        // Obterner post por libro
+        [HttpGet]
+        [Route("GetPostByLibro/{libro}")]
+
+        public IActionResult GetPostByLibro(string libro)
+        {
+            var posts = (from p in _parcialContexto.posts
+                         join a in _parcialContexto.autores
+                         on p.AutorId equals a.Id
+                         join au in _parcialContexto.autorlibro
+                         on a.Id equals au.AutorId
+                         join li in _parcialContexto.libros
+                         on au.LibroId equals li.Id
+                         select new
+                         {
+                             p.Id,
+                             p.Contenido,
+                             p.Titulo,
+                             p.FechaPublicacion,
+                             titulo = li.Titulo
+                         }).ToList();
+            if (posts.Count() == 0)
+            {
+                return NotFound();
+            }
+            return Ok(posts);
+        }
+
     }
 }
 
