@@ -50,10 +50,10 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(posts);
         }
 
+       
 
 
-
-          [HttpGet]
+        [HttpGet]
         [Route("Find/{filtro}")]
 
         public IActionResult FindByDescription(string filtro)
@@ -70,14 +70,15 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 
         /// por autor  
 
-        [HttpGet]
-        [Route("FindAutor/{filtro}")]
+   
 
-        public IActionResult FindByDescription2(string filtro)
+        [HttpGet]
+        [Route("GetAllAutores")]
+        public IActionResult GetNombres()
         {
             var posts = (from po in _parcialContexto.posts
-                         join a in _parcialContexto.autores 
-                         on  po.AutorId equals a.Id
+                         join a in _parcialContexto.autores
+                         on po.AutorId equals a.Id
 
                          select new
                          {
@@ -85,10 +86,10 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
                              a.Nombre
 
                          }).OrderBy(resultado => resultado.Nombre)
-                         .Take(20) 
+                         .Take(20)
                          .ToList();
 
-            if (posts == null)
+            if (posts.Count == 0)
             {
                 return NotFound();
             }
