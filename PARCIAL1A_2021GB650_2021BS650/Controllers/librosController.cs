@@ -37,7 +37,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [HttpGet]
         [Route("GetLibroByNombre/{nombre}")]
 
-        public IActionResult Get(string nombre)
+        public IActionResult GetByNombre(string nombre)
         {
             libros? libro = (from e in _parcialContexto.libros
                                where e.Titulo == nombre
@@ -53,7 +53,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [HttpPost]
         [Route("Add")]
 
-        public IActionResult Guardare([FromBody] libros libro)
+        public IActionResult Guardar([FromBody] libros libro)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [HttpPut]
         [Route("actualizar/{id}")]
 
-        public IActionResult Actualizare(int id, [FromBody] libros libroModificar)
+        public IActionResult Actualizar(int id, [FromBody] libros libroModificar)
         {
             libros? libroActual = (from e in _parcialContexto.libros
                                    where e.Id == id
@@ -81,7 +81,6 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
                 return NotFound();
             }
 
-            libroActual.Id = libroModificar.Id;
             libroActual.Titulo = libroModificar.Titulo;
          
             _parcialContexto.Entry(libroActual).State = EntityState.Modified;
@@ -93,7 +92,7 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 
         [HttpDelete]
         [Route("eliminar/{id}")]
-        public IActionResult EliminarE(int id)
+        public IActionResult Eliminar(int id)
         {
             libros? libro = (from e in _parcialContexto.libros
                                 where e.Id == id
