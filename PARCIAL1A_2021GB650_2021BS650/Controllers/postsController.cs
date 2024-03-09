@@ -50,7 +50,10 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             return Ok(posts);
         }
 
-        [HttpGet]
+
+
+
+          [HttpGet]
         [Route("Find/{filtro}")]
 
         public IActionResult FindByDescription(string filtro)
@@ -58,6 +61,33 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
             posts? posts = (from p in _parcialContexto.posts
                             where p.Titulo.Contains(filtro)
                                 select p).FirstOrDefault();
+            if (posts == null)
+            {
+                return NotFound();
+            }
+            return Ok(posts);
+        }
+
+        /// por autor  
+
+        [HttpGet]
+        [Route("FindAutor/{filtro}")]
+
+        public IActionResult FindByDescription2(string filtro)
+        {
+            var posts = (from po in _parcialContexto.posts
+                         join a in _parcialContexto.autores 
+                         on  po.AutorId equals a.Id
+
+                         select new
+                         {
+                             po.Id,
+                             a.Nombre
+
+                         }).OrderBy(resultado => resultado.Nombre)
+                         .Take(20) 
+                         .ToList();
+
             if (posts == null)
             {
                 return NotFound();
