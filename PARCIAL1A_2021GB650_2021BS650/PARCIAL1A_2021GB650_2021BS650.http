@@ -1,0 +1,6 @@
+@PARCIAL1A_2021GB650_2021BS650_HostAddress = http://localhost:5283
+
+GET {{PARCIAL1A_2021GB650_2021BS650_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
