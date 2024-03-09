@@ -70,32 +70,35 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 
         /// por autor  
 
-   
 
         [HttpGet]
-        [Route("GetAllAutores")]
-        public IActionResult GetNombres()
+        [Route("FindAutor/{filtro}")]
+
+        public IActionResult FindByDes(string filtro)
         {
             var posts = (from po in _parcialContexto.posts
                          join a in _parcialContexto.autores
                          on po.AutorId equals a.Id
+
+                         where a.Nombre == filtro
 
                          select new
                          {
                              po.Id,
                              a.Nombre
 
-                         }).OrderBy(resultado => resultado.Nombre)
+                         })
+                         .OrderBy(resultado => resultado.Nombre)
                          .Take(20)
                          .ToList();
-
-            if (posts.Count == 0)
+            if (posts == null)
             {
                 return NotFound();
             }
             return Ok(posts);
         }
 
+       
         [HttpPost]
         [Route("Add")]
 
