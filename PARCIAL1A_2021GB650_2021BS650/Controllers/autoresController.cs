@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PARCIAL1A_2021GB650_2021BS650.Controllers;
+using PARCIAL1A_2021GB650_2021BS650.Models;
 
 namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 {
@@ -10,11 +11,11 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
     [ApiController]
     public class autoresController : Controller
     {
-        private readonly equiposContext _equiposContexto;
+        private readonly parcial1aContext _parcialContexto;
 
-        public equiposController(equiposContext equiposContexto)
+        public autoresController(parcial1aContext parcialContexto)
         {
-            _equiposContexto = equiposContexto;
+            _parcialContexto = parcialContexto;
         }
 
         ///sumary
@@ -25,14 +26,14 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [Route("GetAll")]
         public IActionResult Get()
         {
-            List<equipos> listadoEquipo = (from e in _equiposContexto.equipos
-                                           select e).ToList();
+            List<autores> listadoautores = (from a in _parcialContexto.autores
+                                            select a).ToList();
 
-            if (listadoEquipo.Count == 0)
+            if (listadoautores.Count == 0)
             {
                 return NotFound();
             }
-            return Ok(listadoEquipo);
+            return Ok(listadoautores);
         }
 
         [HttpGet]
@@ -40,14 +41,14 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 
         public IActionResult Get(int id)
         {
-            equipos? equipo = (from e in _equiposContexto.equipos
-                               where e.id_equipos == id
-                               select e).FirstOrDefault();
-            if (equipo == null)
+            autores? autores = (from a in _parcialContexto.autores
+                                where a.Id == id
+                               select a).FirstOrDefault();
+            if (autores == null)
             {
                 return NotFound();
             }
-            return Ok(equipo);
+            return Ok(autores);
         }
 
         [HttpGet]
@@ -55,25 +56,25 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
 
         public IActionResult FindByDescription(string filtro)
         {
-            equipos? equipo = (from e in _equiposContexto.equipos
-                               where e.descripcion.Contains(filtro)
-                               select e).FirstOrDefault();
-            if (equipo == null)
+            autores? autores = (from a in _parcialContexto.autores
+                                where a.Nombre.Contains(filtro)
+                               select a).FirstOrDefault();
+            if (autores == null)
             {
                 return NotFound();
             }
-            return Ok(equipo);
+            return Ok(autores);
         }
 
         [HttpPost]
         [Route("Add")]
 
-        public IActionResult Guardare([FromBody] equipos equipo)
+        public IActionResult Guardare([FromBody] autores autore)
         {
             try
             {
-                _equiposContexto.equipos.Add(equipo);
-                _equiposContexto.SaveChanges();
+                _parcialContexto.autores.Add(autore);
+                _parcialContexto.SaveChanges();
                 return Ok();
             }
             catch (Exception ex)
@@ -85,28 +86,24 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [HttpPut]
         [Route("actualizar/{id}")]
 
-        public IActionResult Actualizare(int id, [FromBody] equipos equipoModificar)
+        public IActionResult Actualizare(int id, [FromBody] autores autoresModificar)
         {
-            equipos? equipoActual = (from e in _equiposContexto.equipos
-                                     where e.id_equipos == id
-                                     select e).FirstOrDefault();
+            autores? autoresActual = (from a in _parcialContexto.autores
+                                      where a.Id== id
+                                     select a).FirstOrDefault();
 
-            if (equipoActual == null)
+            if (autoresActual == null)
             {
                 return NotFound();
             }
 
-            equipoActual.nombre = equipoModificar.nombre;
-            equipoActual.descripcion = equipoModificar.descripcion;
-            equipoActual.marca_id = equipoModificar.marca_id;
-            equipoActual.tipo_equipo_id = equipoModificar.tipo_equipo_id;
-            equipoActual.anio_compra = equipoModificar.anio_compra;
-            equipoActual.costo = equipoModificar.costo;
+            autoresActual.Nombre = autoresModificar.Nombre;
+          
 
-            _equiposContexto.Entry(equipoActual).State = EntityState.Modified;
-            _equiposContexto.SaveChanges();
+            _parcialContexto.Entry(autoresActual).State = EntityState.Modified;
+            _parcialContexto.SaveChanges();
 
-            return Ok(equipoModificar);
+            return Ok(autoresModificar);
 
         }
 
@@ -114,18 +111,18 @@ namespace PARCIAL1A_2021GB650_2021BS650.Controllers
         [Route("eliminar/{id}")]
         public IActionResult EliminarE(int id)
         {
-            equipos? equipo = (from e in _equiposContexto.equipos
-                               where e.id_equipos == id
-                               select e).FirstOrDefault();
+            autores? autor = (from a in _parcialContexto.autores
+                              where a.Id== id
+                               select a).FirstOrDefault();
 
-            if (equipo == null)
+            if (autor == null)
                 return NotFound();
 
-            _equiposContexto.equipos.Attach(equipo);
-            _equiposContexto.equipos.Remove(equipo);
-            _equiposContexto.SaveChanges();
+            _parcialContexto.autores.Attach(autor);
+            _parcialContexto.autores.Remove(autor);
+            _parcialContexto.SaveChanges();
 
-            return Ok(equipo);
+            return Ok(autor);
         }
 
     }
