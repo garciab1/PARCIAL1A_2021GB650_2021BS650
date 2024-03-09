@@ -2,5 +2,9 @@
 {
     public class posts
     {
+        public int Id { get; set; }
+        public string? Titutlo { get; set; }
+        public string? Contenido { get; set; }
+        public 
     }
 }
